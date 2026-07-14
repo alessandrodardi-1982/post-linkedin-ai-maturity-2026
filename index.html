@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi cerca cosa nell'AI delle aziende italiane — Report Polimi 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --navy-deep:#070d1a;
+    --navy:#0c1729;
+    --navy-card:#101f36;
+    --accent:#2ca1fe;
+    --accent-soft:rgba(44,161,254,0.14);
+    --real:#33d6a6;
+    --real-soft:rgba(51,214,166,0.12);
+    --text:#eef3fa;
+    --text-dim:#9fb0c6;
+    --border:rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: radial-gradient(ellipse at top, var(--navy) 0%, var(--navy-deep) 65%);
+    color:var(--text);
+    font-family:'DM Sans', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  .wrap{max-width:980px; margin:0 auto; padding:0 24px;}
+  h1,h2,h3{font-family:'Sora', sans-serif; letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  header.hero{padding:88px 0 32px;}
+  .floating-back{
+    position:fixed; top:20px; left:20px; z-index:200;
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(12,23,41,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    border:1px solid var(--border); color:var(--text);
+    padding:10px 18px; border-radius:999px; font-size:13px; font-family:'DM Sans', sans-serif;
+    text-decoration:none; transition:background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .floating-back:hover{background:rgba(12,23,41,0.97); border-color:var(--accent); color:var(--accent);}
+  h1{font-size:clamp(28px,4.2vw,44px); font-weight:800; line-height:1.15; max-width:820px;}
+  .subtitle{font-size:17px; color:var(--text-dim); margin-top:16px; text-align:justify;}
+
+  .real-banner{
+    display:flex; gap:14px; align-items:flex-start;
+    background:var(--real-soft); border:1px solid rgba(51,214,166,0.35);
+    border-radius:12px; padding:16px 20px; margin:32px 0 48px;
+  }
+  .real-dot{
+    width:10px; height:10px; border-radius:50%; background:var(--real);
+    margin-top:6px; flex-shrink:0; box-shadow:0 0 0 4px rgba(51,214,166,0.18);
+  }
+  .real-banner strong{color:var(--real); font-family:'Sora',sans-serif; font-size:14px;}
+  .real-banner p{font-size:14px; color:var(--text-dim); margin-top:4px; text-align:justify;}
+  .real-banner a{color:var(--real);}
+
+  section{padding:40px 0; border-top:1px solid var(--border);}
+  section:first-of-type{border-top:none;}
+  .section-label{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--accent);
+    letter-spacing:0.08em; margin-bottom:8px;
+  }
+  h2{font-size:24px; font-weight:700; margin-bottom:8px;}
+  .section-intro{color:var(--text-dim); font-size:15px; margin-bottom:24px; text-align:justify;}
+
+  .card{
+    background:var(--navy-card); border:1px solid var(--border); border-radius:14px;
+    padding:24px; margin-bottom:20px;
+  }
+  .chart-holder{position:relative; height:320px;}
+
+  .stat-row{display:flex; gap:24px; flex-wrap:wrap; margin-top:20px;}
+  .stat{flex:1; min-width:150px;}
+  .stat .num{font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:700; color:var(--accent);}
+  .stat .lbl{font-size:12px; color:var(--text-dim); margin-top:4px;}
+
+  .interpret{
+    background:linear-gradient(135deg, var(--accent-soft), transparent);
+    border:1px solid rgba(44,161,254,0.3); border-radius:14px; padding:28px;
+  }
+  .interpret h3{font-size:18px; margin-bottom:14px; color:var(--text);}
+  .interpret ul{list-style:none; display:flex; flex-direction:column; gap:14px;}
+  .interpret li{padding-left:22px; position:relative; font-size:14.5px; color:var(--text-dim); text-align:justify;}
+  .interpret li::before{
+    content:"→"; position:absolute; left:0; color:var(--accent); font-weight:700;
+  }
+  .interpret li b{color:var(--text);}
+
+  footer{padding:40px 0 64px; border-top:1px solid var(--border); margin-top:20px;}
+  .sources{font-size:12.5px; color:var(--text-dim);}
+  .sources a{color:var(--accent);}
+  .sources p{margin-bottom:8px;}
+  .updated{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); margin-top:16px;}
+
+  @media (max-width:640px){
+    .chart-holder{height:260px;}
+    .stat-row{gap:16px;}
+  }
+</style>
+</head>
+<body>
+<a class="floating-back" href="https://alessandrodardi-1982.github.io/portfolio/" aria-label="Torna al portfolio">← Portfolio</a>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Chi cerca cosa nell'AI delle aziende italiane</h1>
+    <p class="subtitle">Maturità AI e profili più richiesti nelle imprese italiane, costruito su dati pubblici dell'Osservatorio AI4Innovation del Politecnico di Milano. Nessun dato simulato: ogni numero in questa pagina è verificabile alla fonte.</p>
+  </header>
+
+  <div class="real-banner">
+    <div class="real-dot"></div>
+    <div>
+      <strong>DATI REALI — fonte Osservatorio AI4Innovation, Polimi School of Management</strong>
+      <p>Report 2026 "Innovazione &amp; AI nelle imprese italiane: Gen-AI &amp; Agentic-AI", sondaggio condotto gennaio–marzo 2026 su Innovation Manager e responsabili AI d'impresa. Fonte: <a href="https://www.innovationpost.it/tecnologie/intelligenza-artificiale-solo-1-azienda-su-4-la-sta-adottando-in-modo-strutturato-prevale-luso-diffuso-ma-sporadico/" target="_blank" rel="noopener">Innovation Post — Solo 1 azienda su 4 la adotta in modo strutturato</a>.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-label">01 — MATURITÀ</div>
+    <h2>Solo un'azienda su quattro ha reso l'AI strutturale</h2>
+    <p class="section-intro">Il rapporto tra imprese italiane e intelligenza artificiale ha superato la fase sperimentale, ma la diffusione nei processi di innovazione resta limitata. Un quarto del campione è ancora agli inizi, senza una regia strategica centrale.</p>
+    <div class="card">
+      <div class="chart-holder"><canvas id="chartMaturity"></canvas></div>
+      <div class="stat-row">
+        <div class="stat"><div class="num">26%</div><div class="lbl">AI Scaler — AI integrata nel modello di innovazione</div></div>
+        <div class="stat"><div class="num">50%</div><div class="lbl">medie imprese ancora AI Starter</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">02 — PROFILI RICHIESTI</div>
+    <h2>Il profilo più cercato non è quello tecnico</h2>
+    <p class="section-intro">Tra le aziende che investono in AI, la figura più ricercata unisce competenze tecnologiche e manageriali. I profili puramente tecnici restano una minoranza dell'interesse del mercato.</p>
+    <div class="card">
+      <div class="chart-holder"><canvas id="chartHybrid"></canvas></div>
+      <div class="stat-row">
+        <div class="stat"><div class="num">51%</div><div class="lbl">interesse per profili ibridi (tecnologia + management)</div></div>
+        <div class="stat"><div class="num">32%</div><div class="lbl">interesse per profili puramente tecnici</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">03 — DIMENSIONE AZIENDALE</div>
+    <h2>Le medie imprese sono il punto debole</h2>
+    <p class="section-intro">La quota di aziende "Scaler" varia molto in base alla dimensione. Le medie imprese sono il segmento più critico: troppo grandi per essere agili come le piccole, non abbastanza strutturate per investire come le grandi.</p>
+    <div class="card">
+      <div class="chart-holder"><canvas id="chartSize"></canvas></div>
+      <div class="stat-row">
+        <div class="stat"><div class="num">9%</div><div class="lbl">medie imprese Scaler — il valore più basso del campione</div></div>
+        <div class="stat"><div class="num">39%</div><div class="lbl">grandi imprese nella fascia più matura</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">04 — LETTURA OPERATIVA</div>
+    <h2>Cosa significa per chi si riposiziona su ruoli ibridi</h2>
+    <p class="section-intro">Il dato da solo non basta. Chi viene dalle operations industriali e sta costruendo un profilo ibrido trova qui una conferma di mercato, non solo una tendenza personale.</p>
+    <div class="interpret">
+      <h3>Le implicazioni concrete, non teoriche</h3>
+      <ul>
+        <li><b>Il profilo ibrido non è un compromesso:</b> il 51% di interesse contro il 32% dei profili puramente tecnici mostra che le aziende cercano chi sa tradurre l'AI in un processo esistente, non solo chi sa scriverla.</li>
+        <li><b>Le medie imprese sono il segmento con più margine:</b> solo il 9% ha raggiunto la maturità Scaler. È lo spazio dove l'esperienza operativa pesa più della competenza tecnica pura.</li>
+        <li><b>La traduzione resta il vero collo di bottiglia:</b> il 96% dei team innovation riconosce la necessità di nuove competenze, ma la tecnologia da sola non le genera.</li>
+        <li><b>Il divario non si chiude aspettando:</b> con solo un quarto delle aziende strutturalmente pronte, il vantaggio competitivo va a chi porta metodo prima ancora che strumenti.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="sources">
+      <p><b>Fonti:</b> Osservatorio AI4Innovation, POLIMI School of Management — Report 2026 "Innovazione &amp; AI nelle imprese italiane: Gen-AI &amp; Agentic-AI", dati raccolti gen–mar 2026. <a href="https://www.innovationpost.it/tecnologie/intelligenza-artificiale-solo-1-azienda-su-4-la-sta-adottando-in-modo-strutturato-prevale-luso-diffuso-ma-sporadico/" target="_blank" rel="noopener">innovationpost.it</a></p>
+      <p>Percentuali riferite al campione di Innovation Manager e responsabili AI intervistati dall'Osservatorio, salvo dove diversamente indicato.</p>
+    </div>
+    <div class="updated">Ultimo aggiornamento dati: gen–mar 2026 · Pagina costruita: luglio 2026</div>
+  </footer>
+
+</div>
+
+<script>
+const fontStack = "'DM Sans', sans-serif";
+Chart.defaults.color = '#9fb0c6';
+Chart.defaults.font.family = fontStack;
+Chart.defaults.borderColor = 'rgba(255,255,255,0.08)';
+
+// Chart 1 — Maturità AI, campione totale (stacked orizzontale)
+new Chart(document.getElementById('chartMaturity'), {
+  type: 'bar',
+  data: {
+    labels: ['Imprese italiane'],
+    datasets: [
+      { label: 'AI Scaler', data: [26], backgroundColor: '#2ca1fe', borderRadius: 6 },
+      { label: 'AI Experimenter', data: [49], backgroundColor: 'rgba(255,255,255,0.28)', borderRadius: 6 },
+      { label: 'AI Starter', data: [25], backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 6 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 12, padding: 16 } } },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+      y: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// Chart 2 — Profilo ibrido vs tecnico puro
+new Chart(document.getElementById('chartHybrid'), {
+  type: 'bar',
+  data: {
+    labels: ['Profilo ibrido', 'Profilo tecnico puro'],
+    datasets: [{
+      label: 'Quota di interesse',
+      data: [51, 32],
+      backgroundColor: ['#2ca1fe', 'rgba(255,255,255,0.18)'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Chart 3 — Quota Scaler per dimensione aziendale
+new Chart(document.getElementById('chartSize'), {
+  type: 'bar',
+  data: {
+    labels: ['Piccole', 'Medie', 'Grandi', 'Grandissime'],
+    datasets: [{
+      label: '% Scaler',
+      data: [30, 9, 39, 16],
+      backgroundColor: ['rgba(255,255,255,0.18)', '#2ca1fe', 'rgba(255,255,255,0.18)', 'rgba(255,255,255,0.18)'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+      y: { grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>
